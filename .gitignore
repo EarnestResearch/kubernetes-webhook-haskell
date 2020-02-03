@@ -3,3 +3,6 @@
 *.csr
 result
 *.lock
+.pre-commit-config.yaml
+dist-newstyle/
+dist/
