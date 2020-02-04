@@ -164,7 +164,17 @@ newtype UID = UID Text deriving (Generic, Show, A.ToJSON, A.FromJSON)
 
 -- |
 -- Operation is the type of resource operation being checked for admission control
-data Operation = CREATE | UPDATE | DELETE | CONNECT deriving (Generic, Show, A.ToJSON, A.FromJSON)
+data Operation = Create | Update | Delete | Connect deriving (Generic, Show)
+
+instance A.ToJSON Operation where
+  toJSON = A.genericToJSON opts
+    where
+      opts = A.defaultOptions {A.constructorTagModifier = fmap C.toUpper}
+
+instance A.FromJSON Operation where
+  parseJSON = A.genericParseJSON opts
+    where
+      opts = A.defaultOptions {A.constructorTagModifier = fmap C.toUpper}
 
 -- |
 -- UserInfo holds the information about the user needed to implement the user.Info interface.
