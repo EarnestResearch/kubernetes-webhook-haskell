@@ -1,0 +1,16 @@
+name: CI
+on: [push]
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v1
+    - uses: cachix/install-nix-action@v6
+    - uses: cachix/cachix-action@v3
+      with:
+        name: earnestresearch-public
+        signingKey: '${{ secrets.EARNESTRESEARCH_PUBLIC_CACHIX_SIGNING_KEY }}'
+        file: ci.nix
