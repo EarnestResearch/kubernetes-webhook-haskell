@@ -68,7 +68,7 @@ server :: Server API
 server = mutate
 
 mutate :: W.AdmissionReviewRequest -> Handler W.AdmissionReviewResponse
-mutate req = pure $ W.mutatingWebhook req (\_ -> Right W.Allowed) addToleration
+mutate req = pure $ W.mutatingWebhook req (\_ -> Right addToleration)
 
 addToleration :: W.Patch
 addToleration = 

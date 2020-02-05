@@ -76,7 +76,7 @@
 --   server = mutate
 --
 --   mutate :: W.AdmissionReviewRequest -> Handler W.AdmissionReviewResponse
---   mutate req = pure $ W.mutatingWebhook req (\_ -> Right W.Allowed) addToleration
+--   mutate req = pure $ W.mutatingWebhook req (\_ -> Right addToleration)
 --
 --   addToleration :: W.Patch
 --   addToleration =
@@ -106,24 +106,22 @@ data Allowed = Allowed
 mutatingWebhook ::
   -- | the request the webhook receives from Kubernetes
   AdmissionReviewRequest ->
-  -- | logic to validate the request or reject it with an error
-  (AdmissionRequest -> Either Status Allowed) ->
-  -- | the change to apply to the object
-  Patch ->
+  -- | logic to validate the request by returning the change to apply to the object or reject the request with an error
+  (AdmissionRequest -> Either Status Patch) ->
   -- | the response sent back to Kubernetes
   AdmissionReviewResponse
-mutatingWebhook AdmissionReviewRequest {request = req} allow patch =
+mutatingWebhook AdmissionReviewRequest {request = req} mutator =
   admissionReviewResponse AdmissionResponse
     { uid = rid,
       allowed = isRight processedRequest,
-      patch = Just patch,
+      patch = either (const Nothing) Just processedRequest,
       status = either Just (const Nothing) processedRequest,
       patchType = Just JSONPatch,
       auditAnnotations = Nothing
     }
   where
     AdmissionRequest {uid = rid} = req
-    processedRequest = allow req
+    processedRequest = mutator req
 
 -- | Lets you create a validating admission webhook
 validatingWebhook ::
