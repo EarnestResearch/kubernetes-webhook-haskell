@@ -1,5 +1,5 @@
 name:                kubernetes-webhook-haskell
-version:             0.2.0.1
+version:             0.2.0.2
 synopsis:            Create Kubernetes Admission Webhooks in Haskell
 homepage:            https://github.com/EarnestResearch/kubernetes-webhook-haskell#readme
 license:             MIT
@@ -16,7 +16,7 @@ description:         This library lets you create [Kubernetes Admission Webhooks
 library
   hs-source-dirs:      src
   exposed-modules:     Kubernetes.Webhook, Kubernetes.Webhook.Types
-  build-depends:       aeson                >= 1.4.6 && < 1.5,
+  build-depends:       aeson                >= 1.4.6 && < 1.6,
                        base                 >= 4.7 && < 5,
                        base64-bytestring    >= 1.0.0 && < 1.2,
                        binary               >= 0.8.6 && < 0.9,
